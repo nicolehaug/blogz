@@ -1,11 +1,10 @@
 {% extends "base.html" %}
 
 {% block content %}
-         
-   <h1 align="center">{{blog.title}}</h1>
-   <p align="center">{{blog.body}}</p>
-   <hr />
-   <p align="center">{{blog.time_stamp}}</p>
+    
+    <h2>{{ blog.title }}</h2></a>
+    <p>{{ blog.body }}</p>
+    <small><i>Written by</i><a href='/blog?user={{ blog.user.username }}'>{{ blog.user.username }}</a>{{ blog.date }}</small>
 
 {% endblock %}
 

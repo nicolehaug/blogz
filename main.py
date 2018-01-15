@@ -9,6 +9,18 @@ app.config['SQLALCHEMY_ECHO'] = True
 db = SQLAlchemy(app)
 app.secret_key = 'thekeytomythoughts'
 
+class User(db.Model):
+
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(120), unique=True)
+    password = db.Column(db.String(120))
+    blogs = db.relationship('Task', backref='owner')
+
+    def __init__(self, username, password):
+        self.username = username
+        self.password = password
+
+
 class Blogs(db.Model):
  
     id = db.Column(db.Integer, primary_key=True)

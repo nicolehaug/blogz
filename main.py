@@ -7,7 +7,7 @@ app.config['DEBUG'] = True
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://blogz:helloworld@localhost:8889/build-a-blog'
 app.config['SQLALCHEMY_ECHO'] = True
 db = SQLAlchemy(app)
-app.secret_key = 'thekeytomythoughts'
+app.secret_key = 'seesharp'
 
 class User(db.Model):
 
@@ -15,10 +15,11 @@ class User(db.Model):
     username = db.Column(db.String(120), unique=True)
     password = db.Column(db.String(120))
     blogs = db.relationship('Task', backref='owner')
+    pw_hash = db.relationship('Blog', backref='user')
 
     def __init__(self, username, password):
         self.username = username
-        self.password = password
+        self.pw_hash = make_pwd_hash(password)
 
 
 class Blogs(db.Model):
@@ -27,19 +28,21 @@ class Blogs(db.Model):
     title = db.Column(db.String(120), unique =True)
     body = db.Column(db.Text)
     time_stamp = db.Column(db.DateTime)
+    owner_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+
  
-    def __init__(self, title, body, time_stamp=None):
+    def __init__(self, title, body, time_stamp=None, owner_id):
         self.title = title
         self.body = body
         if time_stamp is None:
             time_stamp = datetime.utcnow()
         self.time_stamp = time_stamp
+        self.owner_id = owner_id
+         if date is None:
+            date = datetime.utcnow()
+        self.date = date
  
-    def validation(self):
-        if self.title and self.body and self.time_stamp:
-            return True
-        else:
-            return False
+    
 
 @app.route('/')
 def index():
